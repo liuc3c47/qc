@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>品質異常回報系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        
+        /* 直角標題列 */
+        .header-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white; 
+            padding: 1.5rem 1rem;
+            border-radius: 0 !important; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        /* 統一高度 48px */
+        .input-field { 
+            width: 100%; 
+            border: 1px solid #cbd5e1; 
+            height: 48px; 
+            padding: 0 0.75rem; 
+            border-radius: 0.5rem; 
+            font-size: 16px; 
+            background: white;
+            display: block;
+        }
+
+        .label-title { 
+            font-weight: 800; 
+            color: #334155; 
+            font-size: 0.85rem; 
+            margin-bottom: 0.5rem; 
+            display: block;
+            white-space: nowrap;
+        }
+
+        .section-card { 
+            background: white; 
+            padding: 1.25rem; 
+            border-radius: 1rem; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+            margin-bottom: 1.25rem; 
+            border: 1px solid #e2e8f0; 
+        }
+        
+        .field-group { margin-bottom: 1.25rem; }
+
+        .loading-overlay { 
+            display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); 
+            z-index: 50; flex-direction: column; align-items: center; justify-content: center; 
+            color: white; backdrop-filter: blur(4px);
+        }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.2); border-top: 4px solid #6366f1; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="pb-20">
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p class="mt-4 font-bold text-sm tracking-widest">正在傳輸至雲端...</p>
+    </div>
+
+    <header class="header-banner text-center">
+        <h1 class="text-xl font-bold tracking-tight">🛠 品質異常回報系統</h1>
+        <p class="text-slate-400 text-[10px] mt-1 uppercase tracking-widest font-medium">Production Data Entry</p>
+    </header>
+
+    <div class="max-w-md mx-auto px-4">
+        <form id="reportForm">
+            <!-- 區塊 1：基礎資訊 -->
+            <div class="section-card">
+                <div class="field-group">
+                    <label class="label-title">處理日期</label>
+                    <input type="date" id="procDate" class="input-field" style="max-width: 150px;" required>
+                </div>
+                <div class="field-group">
+                    <label class="label-title">E/G NO.</label>
+                    <input type="text" id="egNo" class="input-field" placeholder="請輸入編號" required>
+                </div>
+                <div class="field-group">
+                    <label class="label-title">機種</label>
+                    <select id="model" class="input-field" required>
+                        <option value="" disabled selected hidden>請選擇機種</option>
+                        <option>BBJ3</option><option>BBJ8</option><option>BCB2</option><option>BCB8</option>
+                        <option>BCCA</option><option>BCCB</option><option>BCV7</option><option>BCV8</option>
+                        <option>BFV4</option><option>BH11</option><option>BJC9</option><option>BJH4</option>
+                        <option>BJH5</option><option>BKB5</option><option>BKB6</option><option>BKC6</option>
+                        <option>BKC7</option><option>BKG6</option><option>BKGA</option><option>BKR6</option>
+                        <option>BLB4</option><option>BLB6</option><option>BLC3</option><option>BR31</option>
+                        <option>BR32</option><option>DH11</option><option>DHT1</option><option>DL81</option>
+                        <option>DL82</option><option>DR21</option><option>DR31</option><option>DR32</option>
+                        <option>ER32</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 區塊 2：分類 -->
+            <div class="section-card">
+                <div class="field-group">
+                    <label class="label-title">處置方式</label>
+                    <select id="action" class="input-field">
+                        <option>修整</option><option>更換</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="label-title">部品別</label>
+                    <select id="partType" class="input-field">
+                        <option>1.前輪</option><option>2.後輪</option><option>3.後臂</option>
+                        <option>4.前煞車盤</option><option>5.COVER</option><option>6.主支架</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="label-title">責任區分</label>
+                    <select id="responsibility" class="input-field">
+                        <option>1.廠商</option><option>2.自責</option><option>3.他責</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="label-title">問題點分類</label>
+                    <select id="category" class="input-field">
+                        <option>1.外觀</option><option>2.尺寸</option><option>3.機能</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="label-title">問題點內容</label>
+                    <textarea id="content" class="input-field !h-auto py-2" rows="2" placeholder="詳細內容..."></textarea>
+                </div>
+            </div>
+
+            <!-- 區塊 3：數量與時間 (三欄並列) -->
+            <div class="section-card">
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="label-title">件數</label>
+                        <select id="count" class="input-field"></select>
+                    </div>
+                    <div>
+                        <label class="label-title">開始時間</label>
+                        <input type="time" id="startTime" class="input-field">
+                    </div>
+                    <div>
+                        <label class="label-title">結束時間</label>
+                        <input type="time" id="endTime" class="input-field">
+                    </div>
+                </div>
+                <div class="field-group mt-6">
+                    <label class="label-title">備註</label>
+                    <input type="text" id="note" class="input-field" placeholder="其他說明">
+                </div>
+            </div>
+
+            <!-- 拍照區 -->
+            <div class="section-card bg-slate-100/80 border-dashed border-2 border-slate-300 py-6">
+                <div class="cursor-pointer text-center" onclick="document.getElementById('fileInput').click()">
+                    <div class="text-2xl mb-1">📸</div>
+                    <span id="fileMsg" class="text-xs text-slate-600 font-bold">點擊拍照 (高壓縮上傳)</span>
+                    <img id="imgPreview" class="hidden w-full max-h-48 object-contain mt-3 rounded-lg shadow-md border-2 border-white">
+                </div>
+                <input type="file" id="fileInput" accept="image/*" capture="environment" class="hidden" onchange="processImage(this)">
+            </div>
+
+            <button type="button" id="submitBtn" onclick="handleFormSubmit()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg shadow-xl active:scale-95 transition-all mt-4 mb-10">
+                確認送出資料
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // 【重要】請更換為您 GAS 部署後的 exec 網址
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwY5aAI2smP8MQ3j_9LaJDQ9jbulziH5Jod9mC-IWtWGVYLjCxb2qW8clkrcD-ko5Id/exec";
+
+        let compressedBlob = null;
+
+        window.onload = function() {
+            setTodayDate();
+            generateCountOptions();
+        };
+
+        function setTodayDate() {
+            document.getElementById('procDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        function generateCountOptions() {
+            const select = document.getElementById('count');
+            for(let i=1; i<=50; i++) {
+                let opt = document.createElement('option');
+                opt.value = i; opt.innerHTML = i;
+                select.appendChild(opt);
+            }
+        }
+
+        async function processImage(input) {
+            const file = input.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const preview = document.getElementById('imgPreview');
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                document.getElementById('fileMsg').innerText = "照片已處理";
+            };
+            reader.readAsDataURL(file);
+            // 壓縮設定：800px 寬, 0.5 品質
+            compressedBlob = await compressImage(file, 800, 0.3);
+        }
+
+        function compressImage(file, maxWidth, quality) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width, height = img.height;
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
+                };
+            });
+        }
+
+        async function handleFormSubmit() {
+            const btn = document.getElementById('submitBtn');
+            const overlay = document.getElementById('loadingOverlay');
+            if(!document.getElementById('procDate').value || !document.getElementById('egNo').value || !document.getElementById('model').value) {
+                alert("請填寫必要欄位！"); return;
+            }
+            overlay.style.display = 'flex';
+            btn.disabled = true;
+
+            const formData = {
+                procDate: document.getElementById('procDate').value,
+                egNo: document.getElementById('egNo').value,
+                model: document.getElementById('model').value,
+                action: document.getElementById('action').value,
+                partType: document.getElementById('partType').value,
+                responsibility: document.getElementById('responsibility').value,
+                category: document.getElementById('category').value,
+                content: document.getElementById('content').value,
+                count: document.getElementById('count').value,
+                startTime: document.getElementById('startTime').value,
+                endTime: document.getElementById('endTime').value,
+                note: document.getElementById('note').value
+            };
+
+            if (compressedBlob) {
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    formData.fileData = reader.result.split(',')[1];
+                    formData.fileType = 'image/jpeg';
+                    formData.fileName = "GITHUB_" + Date.now() + ".jpg";
+                    await postToGas(formData);
+                };
+                reader.readAsDataURL(compressedBlob);
+            } else {
+                await postToGas(formData);
+            }
+        }
+
+        async function postToGas(data) {
+            try {
+                // 使用 fetch 發送到 GAS
+                await fetch(GAS_API_URL, {
+                    method: "POST",
+                    mode: "no-cors", // 重要：解決跨網域安全限制
+                    body: JSON.stringify(data)
+                });
+                
+                alert("✅ 資料已送出！(系統正在背景處理中)");
+                resetAll();
+            } catch (error) {
+                alert("❌ 送出失敗：" + error);
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+
+        function resetAll() {
+            document.getElementById('reportForm').reset();
+            document.getElementById('imgPreview').classList.add('hidden');
+            document.getElementById('imgPreview').src = "";
+            document.getElementById('fileMsg').innerText = "點擊拍照";
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+            compressedBlob = null;
+            setTodayDate();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
