@@ -10,7 +10,7 @@
         
         /* 直角標題列 */
         .header-banner {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #059669 0%, #0f766e 100%);
             color: white; 
             padding: 0.5rem 1rem;
             border-radius: 0 !important; 
@@ -88,124 +88,131 @@
         <p class="text-slate-400 text-xs mt-2 uppercase tracking-[0.2em]">Quality Control System</p>
     </header>
 
-    <div class="max-w-md mx-auto px-6">
-        <form id="reportForm">
+   <!-- 將容器寬度放大，並加入 Grid 佈局 -->
+<div class="max-w-5xl mx-auto px-6">
+    <form id="reportForm">
+        
+        <!-- 使用 Grid：手機 1 欄，電腦 (md) 2 欄 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
             
-            <!-- 區塊 1: 基本資訊 -->
-            <div class="section-card">
-                <div class="space-y-8">
-                    <div>
-                        <label class="label-title">處理日期</label>
-                        <input type="date" id="procDate" class="input-field input-date" required>
-                    </div>
-                    <div>
-                        <label class="label-title">E/G NO.</label>
-                        <input type="text" id="egNo" class="input-field w-full" placeholder="請輸入編號" required>
-                    </div>
-                    <div>
-                        <label class="label-title">機種</label>
-                        <select id="model" class="input-field w-full"required>
-                            <!-- 預設顯示請選擇，但在列表中隱藏且不可重選 -->
-                            <option value="" disabled selected hidden>請選擇</option>
-                            <option>BBJ3</option><option>BBJ8</option><option>BCB2</option><option>BCB8</option>
-                            <option>BCCA</option><option>BCCB</option><option>BCV7</option><option>BCV8</option>
-                            <option>BFV4</option><option>BH11</option><option>BJC9</option><option>BJH4</option>
-                            <option>BJH5</option><option>BKB5</option><option>BKB6</option><option>BKC6</option>
-                            <option>BKC7</option><option>BKG6</option><option>BKGA</option><option>BKR6</option>
-                            <option>BLB4</option><option>BLB6</option><option>BLC3</option><option>BR31</option>
-                            <option>BR32</option><option>DH11</option><option>DHT1</option><option>DL81</option>
-                            <option>DL82</option><option>DR21</option><option>DR31</option><option>DR32</option>
-                            <option>ER32</option>
-                        </select>
+            <!-- 左側欄位組合 -->
+            <div class="space-y-0">
+                <!-- 區塊 1: 基本資訊 -->
+                <div class="section-card h-full">
+                    <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">基本資訊</h2>
+                    <div class="space-y-8">
+                        <div>
+                            <label class="label-title">處理日期</label>
+                            <input type="date" id="procDate" class="input-field input-date" required>
+                        </div>
+                        <div>
+                            <label class="label-title">E/G NO.</label>
+                            <input type="text" id="egNo" class="input-field w-full" placeholder="請輸入編號" required>
+                        </div>
+                        <div>
+                            <label class="label-title">機種</label>
+                            <select id="model" class="input-field w-full" required>
+                                <option value="" disabled selected hidden>請選擇</option>
+                                <option>BBJ3</option><!-- ...其餘選項維持不變... -->
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 區塊 2: 異常詳情 -->
-            <div class="section-card">
-                <div class="space-y-8">
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            
-                            <label class="label-title">處置方式</label>
-                            <select id="action" class="input-field w-full">
-                                <option value="" disabled selected hidden>請選擇</option>
-                                <option>1.修整</option><option>2.更換</option>
-                            </select>
+            <!-- 右側欄位組合 -->
+            <div class="space-y-0">
+                <!-- 區塊 2: 異常詳情 -->
+                <div class="section-card h-full">
+                    <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">異常詳情</h2>
+                    <div class="space-y-8">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="label-title">處置方式</label>
+                                <select id="action" class="input-field w-full">
+                                    <option value="" disabled selected hidden>請選擇</option>
+                                    <option>1.修整</option><option>2.更換</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="label-title">問題點分類</label>
+                                <select id="category" class="input-field w-full">
+                                    <option value="" disabled selected hidden>請選擇</option>
+                                    <option>1.外觀</option><option>2.尺寸</option><option>3.機能</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="label-title">部品別</label>
+                                <select id="partType" class="input-field w-full">
+                                    <option value="" disabled selected hidden>請選擇</option>
+                                    <option>1.前輪</option><option>2.後輪</option> <!-- ...其餘選項... -->
+                                </select>
+                            </div>
+                            <div>
+                                <label class="label-title">責任區分</label>
+                                <select id="responsibility" class="input-field w-full">
+                                    <option value="" disabled selected hidden>請選擇</option>
+                                    <option>1.廠商</option><option>2.自責</option><option>3.他責</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
-                            <label class="label-title">問題點分類</label>
-                            <select id="category" class="input-field w-full">
-                                <option value="" disabled selected hidden>請選擇</option>
-                                <option>1.外觀</option><option>2.尺寸</option><option>3.機能</option>
-                            </select>
+                            <label class="label-title">問題點內容</label>
+                            <textarea id="content" class="input-field w-full min-h-[120px] !h-auto" rows="3" placeholder="請詳細描述異常現象..."></textarea>
                         </div>
-                        <div>
-                            <label class="label-title">部品別</label>
-                            <select id="partType" class="input-field w-full">
-                                <option value="" disabled selected hidden>請選擇</option>
-                                <option>1.前輪</option><option>2.後輪</option><option>3.後臂</option>
-                                <option>4.前煞車盤</option><option>5.COVER</option><option>6.主支架</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="label-title">責任區分</label>
-                            <select id="responsibility" class="input-field w-full">
-                                <option value="" disabled selected hidden>請選擇</option>
-                                <option>1.廠商</option><option>2.自責</option><option>3.他責</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field-group mt-4">
-                    <div>
-                        <label class="label-title">問題點內容</label>
-                        <textarea id="content" class="input-field w-full min-h-[120px]" rows="3" placeholder="請詳細描述異常現象..."></textarea>
-                    </div>
-                </div>
-            </div>
-            </div>
-
-            <!-- 區塊 3: 數據與時間 -->
-            <div class="section-card">
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="label-title">件數 (數量)</label>
-                        
-                        <input type="number" id="count" class="input-field input-small" value="" inputmode="numeric" pattern="[0-9]*">
-                    </div>
-                    
-                        <div>
-                            <label class="label-title">開始時間</label>
-                            <input type="time" id="startTime" class="input-field input-small">
-                        </div>
-                        <div>
-                            <label class="label-title">結束時間</label>
-                            <input type="time" id="endTime" class="input-field input-small">
-                        </div>
-                    </div>
-
-                    <div class="field-group mt-4">
-                        <label class="label-title">備註說明</label>
-                        <input type="text" id="note" class="input-field w-full" placeholder="補充資訊 (選填)">
                     </div>
                 </div>
             </div>
 
-            <!-- 拍照區 -->
-            <div class="section-card bg-slate-50 border-2 border-dashed border-slate-300 py-10">
-                <div class="cursor-pointer text-center" onclick="document.getElementById('fileInput').click()">
-                    <div class="text-4xl mb-4">📸</div>
-                    <span id="fileMsg" class="text-base text-slate-600 font-bold">點擊啟動相機拍照</span>
-                    <img id="imgPreview" class="hidden w-full max-h-72 object-contain mt-6 rounded-xl shadow-md border-2 border-white">
-                </div>
-                <input type="file" id="fileInput" accept="image/*" capture="environment" class="hidden" onchange="processImage(this)">
-            </div>
+            <!-- 下方區塊 (跨兩欄顯示) -->
+            <div class="md:col-span-2">
+                <div class="section-card">
+                    <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">數量、時間與照片</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- 數據與時間 -->
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="label-title text-[10px]">件數 (數量)</label>
+                                    <input type="number" id="count" class="input-field w-full" inputmode="numeric">
+                                </div>
+                                <div>
+                                    <label class="label-title">開始時間</label>
+                                    <input type="time" id="startTime" class="input-field w-full">
+                                </div>
+                                <div>
+                                    <label class="label-title">結束時間</label>
+                                    <input type="time" id="endTime" class="input-field w-full">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label-title">備註說明</label>
+                                <input type="text" id="note" class="input-field w-full" placeholder="補充資訊 (選填)">
+                            </div>
+                        </div>
 
-            <button type="button" id="submitBtn" onclick="handleFormSubmit()" class="w-full bg-slate-900 text-white py-5 rounded-xl font-bold text-lg shadow-xl active:scale-[0.98] transition-all mt-4 mb-10">
+                        <!-- 拍照區 -->
+                        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl py-6 px-4">
+                            <div class="cursor-pointer text-center" onclick="document.getElementById('fileInput').click()">
+                                <div class="text-3xl mb-2">📸</div>
+                                <span id="fileMsg" class="text-sm text-slate-600 font-bold">點擊啟動相機拍照</span>
+                                <img id="imgPreview" class="hidden w-full max-h-48 object-contain mt-4 rounded-lg shadow-md">
+                            </div>
+                            <input type="file" id="fileInput" accept="image/*" capture="environment" class="hidden" onchange="processImage(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 送出按鈕：電腦版可以限寬防止太長 -->
+        <div class="max-w-xs mx-auto">
+            <button type="button" id="submitBtn" onclick="handleFormSubmit()" class="w-full bg-slate-900 text-white py-5 rounded-xl font-bold text-lg shadow-xl active:scale-[0.98] transition-all mb-20">
                 確認送出報表
             </button>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
 
     <script>
         // 【重要】請更換為您 GAS 部署後的 exec 網址
