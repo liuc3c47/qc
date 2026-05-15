@@ -12,7 +12,7 @@
         .header-banner {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white; 
-            padding: 1.5rem 1rem;
+            padding: 0.5rem 1rem;
             border-radius: 0 !important; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             margin-bottom: 2.5rem;
@@ -36,14 +36,14 @@
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
-        /* 針對日期與時間縮小方框寬度 */
+        /* 針對時間縮小方框寬度 */
         .input-small {
             width: 130px !important;
             max-width: 100%;
         }
-        /* 針對日期與時間縮小方框寬度 */
+        /* 針對日期縮小方框寬度 */
         .input-date {
-            width: 150px !important;
+            width: 180px !important;
             max-width: 100%;
         }
 
@@ -103,7 +103,7 @@
                         <input type="text" id="egNo" class="input-field w-full" placeholder="請輸入編號" required>
                     </div>
                     <div>
-                        <label class="label-title">機種</label>
+                        <label class="label-title">機種1</label>
                         <select id="model" class="input-field w-full"required>
                             <!-- 預設顯示請選擇，但在列表中隱藏且不可重選 -->
                             <option value="" disabled selected hidden>請選擇</option>
@@ -159,7 +159,7 @@
                     <div class="field-group mt-4">
                     <div>
                         <label class="label-title">問題點內容</label>
-                        <textarea id="content" class="input-field w-full" rows="3" placeholder="請詳細描述異常現象..."></textarea>
+                        <textarea id="content" class="input-field w-full min-h-[120px]" rows="3" placeholder="請詳細描述異常現象..."></textarea>
                     </div>
                 </div>
             </div>
@@ -242,7 +242,7 @@
             };
             reader.readAsDataURL(file);
             // 壓縮設定：800px 寬, 0.5 品質
-            compressedBlob = await compressImage(file, 800, 0.3);
+            compressedBlob = await compressImage(file, 800, 0.5);
         }
 
         function compressImage(file, maxWidth, quality) {
