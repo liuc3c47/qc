@@ -26,14 +26,18 @@
         /* 舒適寬敞的輸入框基礎樣式 */
         .input-field { 
             border: 2px solid #e2e8f0; 
-            padding: 0 0.8rem; /* 修正：上下不給 padding，靠 height 垂直置中 */
+            padding: 0 0.8rem; 
             border-radius: 0.5rem; 
             font-size: 16px; 
             background: white;
             transition: all 0.2s ease;
-            display: block;
             margin-top: 0.5rem;
             height: 48px; /* 這樣高度就會精準是 48px */
+            
+            /* 【修正重點】使用 flex 佈局確保所有瀏覽器的 time/date 欄位文字都能垂直置中 */
+            display: inline-flex;
+            align-items: center;
+            line-height: normal;
         }
         .input-field:focus { 
             border-color: #6366f1; 
@@ -41,7 +45,7 @@
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
-        /* 針對時間縮小方框寬度 */
+        /* 針對時間縮小方框寬度（寬度稍微放大至 125px，避免時間格式在手機上擠壓變形） */
         .input-small {
             width: 100px !important;
             max-width: 100%;
@@ -50,7 +54,6 @@
         .input-date {
             width: 180px !important;
             max-width: 100%;
-            height: 30px;
         }
 
         /* 標籤文字：確保塊級顯示防止重疊 */
@@ -68,7 +71,7 @@
             padding: 2rem 1.5rem; 
             border-radius: 1rem; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-            margin-bottom: 0.5rem; /* 現在這個垂直間距能正常發揮作用了 */
+            margin-bottom: 0.5rem; 
             border: 1px solid #e2e8f0;
         }
         
@@ -94,16 +97,13 @@
         <p class="text-slate-400 text-xs mt-2 uppercase tracking-[0.2em]">Quality Control System</p>
     </header>
 
-   <!-- 將容器寬度放大，並加入 Grid 佈局 -->
 <div class="max-w-5xl mx-auto px-6">
     <form id="reportForm">
         
-        <!-- 使用 Grid：手機 1 欄，電腦 (md) 2 欄 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
             
             <!-- 左側欄位組合 -->
             <div class="space-y-0">
-                <!-- 區塊 1: 基本資訊 (已移除 h-full 修正拉伸問題) -->
                 <div class="section-card">
                     <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">基本資訊</h2>
                     <div class="space-y-8">
@@ -136,7 +136,6 @@
 
             <!-- 右側欄位組合 -->
             <div class="space-y-0">
-                <!-- 區塊 2: 異常詳情 (已移除 h-full 修正拉伸問題) -->
                 <div class="section-card">
                     <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">異常詳情</h2>
                     <div class="space-y-8">
@@ -159,7 +158,7 @@
                                 <label class="label-title">部品別</label>
                                 <select id="partType" class="input-field w-full">
                                     <option value="" disabled selected hidden>請選擇</option>
-                                    <option>1.前輪</option><option>2.後輪</option> <!-- ...其餘選項... -->
+                                    <option>1.前輪</option><option>2.後輪</option>
                                 </select>
                             </div>
                             <div>
@@ -185,10 +184,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- 數據與時間 -->
                         <div class="space-y-6">
-                            <div class="grid grid-cols-3 gap-2">
+                            <!-- 修改這裡的 gap 與佈局，防止行動裝置寬度不足導致元件疊在一起 -->
+                            <div class="flex flex-wrap gap-4">
                                 <div>
                                     <label class="label-title">件數 (數量)</label>
-                                    <!-- 修正：將 input 改為 select 才能正確塞入 JS 生成的 1~50 選項 -->
                                     <select id="count" class="input-field input-small">
                                         <option value="" disabled selected hidden>-</option>
                                     </select>
@@ -222,7 +221,6 @@
             </div>
         </div>
 
-        <!-- 送出按鈕：電腦版可以限寬防止太長 -->
         <div class="max-w-xs mx-auto">
             <button type="button" id="submitBtn" onclick="handleFormSubmit()" class="w-full bg-slate-900 text-white py-5 rounded-xl font-bold text-lg shadow-xl active:scale-[0.98] transition-all mb-20">
                 確認送出報表
