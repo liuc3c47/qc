@@ -34,7 +34,7 @@
             margin-top: 0.5rem;
             height: 48px; /* 這樣高度就會精準是 48px */
             
-            /* 【修正重點】使用 flex 佈局確保所有瀏覽器的 time/date 欄位文字都能垂直置中 */
+            /* 使用 flex 佈局確保所有瀏覽器的 time/date 欄位文字都能垂直置中 */
             display: inline-flex;
             align-items: center;
             line-height: normal;
@@ -45,9 +45,9 @@
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
-        /* 針對時間縮小方框寬度（寬度稍微放大至 125px，避免時間格式在手機上擠壓變形） */
+        /* 針對數量與時間縮小方框寬度 */
         .input-small {
-            width: 90px !important;
+            width: 125px !important;
             max-width: 100%;
         }
         /* 針對日期縮小方框寬度 */
@@ -184,13 +184,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- 數據與時間 -->
                         <div class="space-y-6">
-                            <!-- 修改這裡的 gap 與佈局，防止行動裝置寬度不足導致元件疊在一起 -->
                             <div class="flex flex-wrap gap-4">
                                 <div>
                                     <label class="label-title">件數 (數量)</label>
-                                    <select id="count" class="input-field input-small">
-                                        <option value="" disabled selected hidden>-</option>
-                                    </select>
+                                    <!-- 已改回數字輸入框，限定最小輸入值為 1 -->
+                                    <input type="number" id="count" class="input-field input-small" min="1" placeholder="數字">
                                 </div>
                                 <div>
                                     <label class="label-title">開始時間</label>
@@ -236,20 +234,10 @@
 
         window.onload = function() {
             setTodayDate();
-            generateCountOptions();
         };
 
         function setTodayDate() {
             document.getElementById('procDate').value = new Date().toISOString().split('T')[0];
-        }
-
-        function generateCountOptions() {
-            const select = document.getElementById('count');
-            for(let i=1; i<=50; i++) {
-                let opt = document.createElement('option');
-                opt.value = i; opt.innerHTML = i;
-                select.appendChild(opt);
-            }
         }
 
         async function processImage(input) {
