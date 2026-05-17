@@ -45,9 +45,14 @@
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
-        /* 針對數量與時間縮小方框寬度 */
+        /* 針對時間縮小方框寬度 */
         .input-small {
-            width: 80px !important;
+            width: 100px !important;
+            max-width: 100%;
+        }
+        /* 針對數量方框寬度 */
+        .input-small1 {
+            width: 60px !important;
             max-width: 100%;
         }
         /* 針對日期縮小方框寬度 */
@@ -187,9 +192,8 @@
                             <div class="flex flex-wrap gap-4">
                                 <div>
                                     <label class="label-title">件數 (數量)</label>
-                                    <!-- 已改回數字輸入框，限定最小輸入值為 1 -->
-                                    <!-- 修改後的寫法：強控制行動裝置彈出純數字鍵盤 -->
-<input type="number" id="count" class="input-field input-small" min="1" inputmode="numeric" pattern="[0-9]*" placeholder="">
+                                    
+                                     <input type="number" id="count" class="input-field input-small1" min="1" inputmode="numeric" pattern="[0-9]*" placeholder="">
                                 </div>
                                 <div>
                                     <label class="label-title">開始時間</label>
