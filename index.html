@@ -123,7 +123,7 @@
                         </div>
                         <div>
                             <label class="label-title">機種</label>
-                            <select id="model" class="input-field w-full" data-next="action" required>
+                            <select id="model" class="input-field w-full" data-next="content" required>
                                 <option value="" disabled selected hidden>請選擇</option>
                                 <option>BBJ3</option><option>BBJ8</option><option>BCB2</option><option>BCB8</option>
                                 <option>BCCA</option><option>BCCB</option><option>BCV7</option><option>BCV8</option>
@@ -145,39 +145,67 @@
                 <div class="section-card flex-1 flex flex-col">
                     <h2 class="text-lg font-bold mb-4 text-indigo-600 border-b pb-2">異常詳情</h2>
                     <div class="space-y-5 flex-1">
+                        <!-- 問題點內容移至最上方並改為下拉選單 -->
+                        <div>
+                            <label class="label-title">問題點內容</label>
+                            <select id="content" class="input-field w-full" data-next="action">
+                                <option value="" disabled selected hidden>請選擇問題點</option>
+                                <option>1.外觀傷</option>
+                                <option>2.輪胎抖動大</option>
+                                <option>3.沾漆</option>
+                                <option>4.轉音</option>
+                                <option>5.素材不良</option>
+                                <option>6.塗裝不良</option>
+                                <option>7.轉緊</option>
+                                <option>8.胎壓不足</option>
+                                <option>9.速度異常</option>
+                                <option>10.髒污</option>
+                                <option>11.外胎未入</option>
+                                <option>12.變形</option>
+                                <option>13.拉柄未對點組立</option>
+                                <option>14.拉柄回位不良</option>
+                                <option>15.PUSH過長組不入</option>
+                                <option>16.時緊時鬆</option>
+                                <option>17.ABS作動NG</option>
+                                <option>18.吐出牙不足</option>
+                                <option>19.螺牙鎖付不入</option>
+                                <option>20.速度齒外徑異常</option>
+                                <option>21.其他</option>
+                            </select>
+                        </div>
+
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="label-title">處置方式</label>
-                                <select id="action" class="input-field w-full" data-next="category">
+                                <select id="action" class="input-field w-full" data-next="partType">
                                     <option value="" disabled selected hidden>請選擇</option>
                                     <option>1.修整</option><option>2.更換</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="label-title">問題點分類</label>
-                                <select id="category" class="input-field w-full" data-next="partType">
+                                <label class="label-title">責任區分</label>
+                                <select id="responsibility" class="input-field w-full" data-next="category">
                                     <option value="" disabled selected hidden>請選擇</option>
-                                    <option>1.外觀</option><option>2.尺寸</option><option>3.機能</option>
+                                    <option>1.廠商</option><option>2.自責</option><option>3.他責</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="label-title">部品別</label>
                                 <select id="partType" class="input-field w-full" data-next="responsibility">
                                     <option value="" disabled selected hidden>請選擇</option>
-                                    <option>1.前輪</option><option>2.後輪</option>
+                                    <option>1.前輪</option><option>2.後輪</option><option>3.後臂</option>
+                                    <option>4.前煞車盤</option><option>5.COVER</option><option>6.主支架</option>
+
                                 </select>
                             </div>
                             <div>
-                                <label class="label-title">責任區分</label>
-                                <select id="responsibility" class="input-field w-full" data-next="content">
+                                <label class="label-title">問題點分類</label>
+                                <select id="category" class="input-field w-full" data-next="number">
                                     <option value="" disabled selected hidden>請選擇</option>
-                                    <option>1.廠商</option><option>2.自責</option><option>3.他責</option>
+                                    <option>1.外觀</option><option>2.尺寸</option><option>3.機能</option>
                                 </select>
+                                
                             </div>
-                        </div>
-                        <div>
-                            <label class="label-title">問題點內容</label>
-                            <textarea id="content" class="input-field w-full min-h-[60px] !h-auto py-2" rows="3" placeholder="請詳細描述異常現象..." enterkeyhint="next" data-next="count"></textarea>
                         </div>
                     </div>
                 </div>
@@ -339,8 +367,8 @@
                 egNo: document.getElementById('egNo').value,
                 model: document.getElementById('model').value,
                 action: document.getElementById('action').value,
-                partType: document.getElementById('partType').value,
                 responsibility: document.getElementById('responsibility').value,
+                partType: document.getElementById('partType').value,                
                 category: document.getElementById('category').value,
                 content: document.getElementById('content').value,
                 count: document.getElementById('count').value,
@@ -366,6 +394,7 @@
         async function postToGas(data) {
             try {
                 await fetch(GAS_API_URL, {
+                    method: "POST",
                     method: "POST",
                     mode: "no-cors",
                     body: JSON.stringify(data)
