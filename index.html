@@ -70,10 +70,10 @@
             margin-bottom: 0.25rem;
         }
 
-        /* 卡片區域：增加垂直間距 */
+        /* 卡片區域：優化內距，讓大小更適中 */
         .section-card { 
             background: white; 
-            padding: 2rem 1.5rem; 
+            padding: 1.5rem 1.25rem; 
             border-radius: 1rem; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
             margin-bottom: 0.5rem; 
@@ -105,13 +105,14 @@
 <div class="max-w-5xl mx-auto px-6">
     <form id="reportForm">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
+        <!-- 外層 Grid：左右寬度維持 40% 與 60% 比例 -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-x-8 items-stretch">
             
-            <!-- 左側欄位組合 -->
-            <div class="space-y-0">
-                <div class="section-card">
-                    <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">基本資訊</h2>
-                    <div class="space-y-8">
+            <!-- 左側欄位組合 (透過 flex 佈局強制讓卡片延伸等高) -->
+            <div class="space-y-0 md:col-span-2 flex flex-col mb-4 md:mb-0">
+                <div class="section-card flex-1 flex flex-col">
+                    <h2 class="text-lg font-bold mb-4 text-indigo-600 border-b pb-2">基本資訊</h2>
+                    <div class="space-y-5 flex-1">
                         <div>
                             <label class="label-title">處理日期</label>
                             <input type="date" id="procDate" class="input-field input-date" data-next="egNo" required>
@@ -140,10 +141,10 @@
             </div>
 
             <!-- 右側欄位組合 -->
-            <div class="space-y-0">
-                <div class="section-card">
-                    <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">異常詳情</h2>
-                    <div class="space-y-8">
+            <div class="space-y-0 md:col-span-3 flex flex-col mb-4 md:mb-0">
+                <div class="section-card flex-1 flex flex-col">
+                    <h2 class="text-lg font-bold mb-4 text-indigo-600 border-b pb-2">異常詳情</h2>
+                    <div class="space-y-5 flex-1">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="label-title">處置方式</label>
@@ -182,8 +183,8 @@
                 </div>
             </div>
 
-            <!-- 下方區塊 (跨兩欄顯示) -->
-            <div class="md:col-span-2">
+            <!-- 下方區塊 (跨滿 5 欄顯示) -->
+            <div class="md:col-span-5 mt-4">
                 <div class="section-card">
                     <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">數量、時間與照片</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -211,7 +212,6 @@
 
                         <!-- 拍照區 -->
                         <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl py-6 px-4 relative">
-                            <!-- 清除相片按鈕 (預設隱藏 hidden) -->
                             <button type="button" id="clearImgBtn" onclick="clearImage(event)" class="hidden absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white w-8 height-8 rounded-full flex items-center justify-center font-bold shadow-md transition-all active:scale-95 z-10" style="height: 32px; width: 32px;">
                                 ✕
                             </button>
@@ -289,23 +289,21 @@
                 preview.classList.remove('hidden');
                 document.getElementById('fileMsg').innerText = "照片已處理";
                 
-                // 顯示清除按鈕
                 document.getElementById('clearImgBtn').classList.remove('hidden');
             };
             reader.readAsDataURL(file);
             compressedBlob = await compressImage(file, 800, 0.5);
         }
 
-        // 單獨清除照片的函式
         function clearImage(event) {
-            if (event) event.stopPropagation(); // 防止觸發父層的點擊拍照事件
+            if (event) event.stopPropagation(); 
             
-            document.getElementById('fileInput').value = ""; // 清空 input file
+            document.getElementById('fileInput').value = ""; 
             document.getElementById('imgPreview').classList.add('hidden');
             document.getElementById('imgPreview').src = "";
             document.getElementById('fileMsg').innerText = "點擊啟動相機拍照";
-            document.getElementById('clearImgBtn').classList.add('hidden'); // 隱藏清除按鈕
-            compressedBlob = null; // 釋放記憶體資料
+            document.getElementById('clearImgBtn').classList.add('hidden'); 
+            compressedBlob = null; 
         }
 
         function compressImage(file, maxWidth, quality) {
@@ -384,7 +382,7 @@
 
         function resetAll() {
             document.getElementById('reportForm').reset();
-            clearImage(); // 表單重設時直接調用清除相片核心邏輯
+            clearImage(); 
             document.getElementById('loadingOverlay').style.display = 'none';
             document.getElementById('submitBtn').disabled = false;
             setTodayDate();
