@@ -196,11 +196,11 @@
                                 </div>
                                 <div>
                                     <label class="label-title">開始時間</label>
-                                    <input type="time" id="startTime" class="input-field input-small" data-next="endTime">
+                                    <input type="time" id="startTime" class="input-field input-small">
                                 </div>
                                 <div>
                                     <label class="label-title">結束時間</label>
-                                    <input type="time" id="endTime" class="input-field input-small" data-next="note">
+                                    <input type="time" id="endTime" class="input-field input-small">
                                 </div>
                             </div>
                             <div>
@@ -210,7 +210,12 @@
                         </div>
 
                         <!-- 拍照區 -->
-                        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl py-6 px-4">
+                        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl py-6 px-4 relative">
+                            <!-- 清除相片按鈕 (預設隱藏 hidden) -->
+                            <button type="button" id="clearImgBtn" onclick="clearImage(event)" class="hidden absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white w-8 height-8 rounded-full flex items-center justify-center font-bold shadow-md transition-all active:scale-95 z-10" style="height: 32px; width: 32px;">
+                                ✕
+                            </button>
+
                             <div class="cursor-pointer text-center" onclick="document.getElementById('fileInput').click()">
                                 <div class="text-3xl mb-2">📸</div>
                                 <span id="fileMsg" class="text-sm text-slate-600 font-bold">點擊啟動相機拍照</span>
@@ -238,17 +243,15 @@
 
         window.onload = function() {
             setTodayDate();
-            initAutoAdvance(); // 載入時初始化自動跳格邏輯
+            initAutoAdvance(); 
         };
 
         function setTodayDate() {
             document.getElementById('procDate').value = new Date().toISOString().split('T')[0];
         }
 
-        // 自動跳格核心邏輯
         function initAutoAdvance() {
-            // 類型 1：變更即跳格 (下拉選單、日期、時間)
-            const changeFields = document.querySelectorAll('select[data-next], input[type="date"][data-next], input[type="time"][data-next]');
+            const changeFields = document.querySelectorAll('select[data-next], input[type="date"][data-next]');
             changeFields.forEach(field => {
                 field.addEventListener('change', () => {
                     const nextId = field.getAttribute('data-next');
@@ -259,16 +262,14 @@
                 });
             });
 
-            // 類型 2：按下虛擬鍵盤「下一步/Enter」即跳格 (純文字、數字、Textarea)
             const enterFields = document.querySelectorAll('input[type="text"][data-next], input[type="number"][data-next], textarea[data-next]');
             enterFields.forEach(field => {
                 field.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') {
-                        // 如果是 textarea，允許 Shift+Enter 換行，單純 Enter 則跳下一個欄位
                         if (field.tagName === 'TEXTAREA' && e.shiftKey) {
                             return; 
                         }
-                        e.preventDefault(); // 阻止內建換行或誤送出表單
+                        e.preventDefault(); 
                         const nextId = field.getAttribute('data-next');
                         const nextField = document.getElementById(nextId);
                         if (nextField) {
@@ -287,9 +288,24 @@
                 preview.src = e.target.result;
                 preview.classList.remove('hidden');
                 document.getElementById('fileMsg').innerText = "照片已處理";
+                
+                // 顯示清除按鈕
+                document.getElementById('clearImgBtn').classList.remove('hidden');
             };
             reader.readAsDataURL(file);
             compressedBlob = await compressImage(file, 800, 0.5);
+        }
+
+        // 單獨清除照片的函式
+        function clearImage(event) {
+            if (event) event.stopPropagation(); // 防止觸發父層的點擊拍照事件
+            
+            document.getElementById('fileInput').value = ""; // 清空 input file
+            document.getElementById('imgPreview').classList.add('hidden');
+            document.getElementById('imgPreview').src = "";
+            document.getElementById('fileMsg').innerText = "點擊啟動相機拍照";
+            document.getElementById('clearImgBtn').classList.add('hidden'); // 隱藏清除按鈕
+            compressedBlob = null; // 釋放記憶體資料
         }
 
         function compressImage(file, maxWidth, quality) {
@@ -368,12 +384,9 @@
 
         function resetAll() {
             document.getElementById('reportForm').reset();
-            document.getElementById('imgPreview').classList.add('hidden');
-            document.getElementById('imgPreview').src = "";
-            document.getElementById('fileMsg').innerText = "點擊拍照";
+            clearImage(); // 表單重設時直接調用清除相片核心邏輯
             document.getElementById('loadingOverlay').style.display = 'none';
             document.getElementById('submitBtn').disabled = false;
-            compressedBlob = null;
             setTodayDate();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
