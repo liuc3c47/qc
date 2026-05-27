@@ -105,10 +105,8 @@
 <div class="max-w-5xl mx-auto px-6">
     <form id="reportForm">
         
-        <!-- 外層 Grid：左右寬度維持 40% 與 60% 比例 -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-x-8 items-stretch">
             
-            <!-- 左側欄位組合 (透過 flex 佈局強制讓卡片延伸等高) -->
             <div class="space-y-0 md:col-span-2 flex flex-col mb-4 md:mb-0">
                 <div class="section-card flex-1 flex flex-col">
                     <h2 class="text-lg font-bold mb-4 text-indigo-600 border-b pb-2">基本資訊</h2>
@@ -140,12 +138,10 @@
                 </div>
             </div>
 
-            <!-- 右側欄位組合 -->
             <div class="space-y-0 md:col-span-3 flex flex-col mb-4 md:mb-0">
                 <div class="section-card flex-1 flex flex-col">
                     <h2 class="text-lg font-bold mb-4 text-indigo-600 border-b pb-2">異常詳情</h2>
                     <div class="space-y-5 flex-1">
-                        <!-- 問題點內容移至最上方並改為下拉選單 -->
                         <div>
                             <label class="label-title">問題點內容</label>
                             <select id="content" class="input-field w-full" data-next="action">
@@ -200,7 +196,7 @@
                             </div>
                             <div>
                                 <label class="label-title">問題點分類</label>
-                                <select id="category" class="input-field w-full" data-next="number">
+                                <select id="category" class="input-field w-full" data-next="count">
                                     <option value="" disabled selected hidden>請選擇</option>
                                     <option>1.外觀</option><option>2.尺寸</option><option>3.機能</option>
                                 </select>
@@ -211,17 +207,15 @@
                 </div>
             </div>
 
-            <!-- 下方區塊 (跨滿 5 欄顯示) -->
             <div class="md:col-span-5 mt-4">
                 <div class="section-card">
                     <h2 class="text-lg font-bold mb-6 text-indigo-600 border-b pb-2">數量、時間與照片</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- 數據與時間 -->
                         <div class="space-y-6">
                             <div class="flex flex-wrap gap-4">
                                 <div>
                                     <label class="label-title">件數</label>
-                                    <input type="number" id="count" class="input-field input-small1" min="1" inputmode="numeric" pattern="[0-9]*" placeholder="" enterkeyhint="next" data-next="startTime">
+                                    <input type="number" id="count" class="input-field input-small1" min="1" inputmode="numeric" pattern="[0-9]*" placeholder="1" enterkeyhint="next" data-next="startTime">
                                 </div>
                                 <div>
                                     <label class="label-title">開始時間</label>
@@ -238,7 +232,6 @@
                             </div>
                         </div>
 
-                        <!-- 拍照區 -->
                         <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl py-6 px-4 relative">
                             <button type="button" id="clearImgBtn" onclick="clearImage(event)" class="hidden absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white w-8 height-8 rounded-full flex items-center justify-center font-bold shadow-md transition-all active:scale-95 z-10" style="height: 32px; width: 32px;">
                                 ✕
@@ -265,8 +258,7 @@
 </div>
 
     <script>
-        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzzrurhbOWOntgGZ73jS9bdtIPbNK0gTy_tYbgX1aiQHZgF1RpWF5r2LY0b91AOv60/exec"
-        ;
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzzrurhbOWOntgGZ73jS9bdtIPbNK0gTy_tYbgX1aiQHZgF1RpWF5r2LY0b91AOv60/exec";
 
         let compressedBlob = null;
 
@@ -363,6 +355,13 @@
             overlay.style.display = 'flex';
             btn.disabled = true;
 
+            // 取得件數欄位的值
+            let countValue = document.getElementById('count').value;
+            // 如果使用者沒有輸入（空字串），則預設帶入 "1"
+            if (countValue.trim() === "") {
+                countValue = "1";
+            }
+
             const formData = {
                 procDate: document.getElementById('procDate').value,
                 egNo: document.getElementById('egNo').value,
@@ -372,7 +371,7 @@
                 partType: document.getElementById('partType').value,                
                 category: document.getElementById('category').value,
                 content: document.getElementById('content').value,
-                count: document.getElementById('count').value,
+                count: countValue, // 使用處理後的數量
                 startTime: document.getElementById('startTime').value,
                 endTime: document.getElementById('endTime').value,
                 note: document.getElementById('note').value
@@ -395,7 +394,6 @@
         async function postToGas(data) {
             try {
                 await fetch(GAS_API_URL, {
-                    method: "POST",
                     method: "POST",
                     mode: "no-cors",
                     body: JSON.stringify(data)
